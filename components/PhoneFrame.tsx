@@ -6,7 +6,7 @@ interface PhoneFrameProps {
 
 export function PhoneFrame({ children }: PhoneFrameProps) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-blue-50 p-4">
       {/* Phone Container */}
       <div className="relative w-full max-w-sm">
         {/* Phone Body */}
