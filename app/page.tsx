@@ -122,18 +122,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile Layout */}
-      <div className="md:hidden flex items-center justify-center min-h-screen bg-background">
-        <div className="w-full bg-background flex flex-col max-h-screen">
-          {/* Mobile scrollable content */}
-          <div className="relative bg-background flex-1 overflow-y-auto pb-20">
-            {screenComponent}
-          </div>
-        </div>
-      </div>
-
-      {/* Desktop Layout */}
-      <div className="hidden md:flex items-center justify-center min-h-screen bg-background">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="w-full max-w-sm bg-background shadow-lg rounded-2xl overflow-hidden flex flex-col max-h-screen">
           {/* Mobile frame border - scrollable for vendor and detail screens */}
           <div className="relative bg-background flex-1 overflow-y-auto pb-20">
@@ -146,71 +135,71 @@ function AppContent() {
       {currentScreen !== 'onboarding' &&
         !currentScreen.startsWith('detail-') &&
         currentScreen !== 'vendor' && (
-          <div className="fixed md:static bottom-0 left-0 right-0 w-full bg-card border-t border-border md:border-t-0 md:relative z-40">
-            <div className="flex items-center justify-around px-2 md:px-4 py-2 md:py-3">
+          <div className="sticky bottom-0 left-0 right-0 w-full bg-card border-t border-border">
+            <div className="flex items-center justify-around px-4 py-3">
               <button
                 onClick={() => handleNavigate('home')}
-                className={`flex flex-col items-center gap-0.5 px-2 md:px-3 py-1 md:py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
                   currentScreen === 'home'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 title="Home"
               >
-                <span className="text-lg md:text-xl">🏠</span>
-                <span className="text-[10px] md:text-xs font-medium">Home</span>
+                <span className="text-xl">🏠</span>
+                <span className="text-xs font-medium">Home</span>
               </button>
 
               <button
                 onClick={() => handleNavigate('discover')}
-                className={`flex flex-col items-center gap-0.5 px-2 md:px-3 py-1 md:py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
                   currentScreen === 'discover'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 title="Discover"
               >
-                <span className="text-lg md:text-xl">🔍</span>
-                <span className="text-[10px] md:text-xs font-medium">Discover</span>
+                <span className="text-xl">🔍</span>
+                <span className="text-xs font-medium">Discover</span>
               </button>
 
               <button
                 onClick={() => handleNavigate('saved')}
-                className={`flex flex-col items-center gap-0.5 px-2 md:px-3 py-1 md:py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
                   currentScreen === 'saved'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 title="Saved"
               >
-                <span className="text-lg md:text-xl">❤️</span>
-                <span className="text-[10px] md:text-xs font-medium">Saved</span>
+                <span className="text-xl">❤️</span>
+                <span className="text-xs font-medium">Saved</span>
               </button>
 
               <button
                 onClick={() => handleNavigate('downloads')}
-                className={`flex flex-col items-center gap-0.5 px-2 md:px-3 py-1 md:py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
                   currentScreen === 'downloads'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 title="Downloads"
               >
-                <span className="text-lg md:text-xl">⬇️</span>
-                <span className="text-[10px] md:text-xs font-medium">Downloads</span>
+                <span className="text-xl">⬇️</span>
+                <span className="text-xs font-medium">Downloads</span>
               </button>
 
               <button
                 onClick={() => handleNavigate('vendor')}
-                className={`flex flex-col items-center gap-0.5 px-2 md:px-3 py-1 md:py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
                   currentScreen === 'vendor'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 title="For Vendors"
               >
-                <span className="text-lg md:text-xl">👨‍💼</span>
-                <span className="text-[10px] md:text-xs font-medium">profile</span>
+                <span className="text-xl">👨‍💼</span>
+                <span className="text-xs font-medium">profile</span>
               </button>
             </div>
           </div>
