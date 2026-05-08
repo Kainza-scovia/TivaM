@@ -11,8 +11,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  userScalable: true,
 }
 
 export const metadata: Metadata = {
@@ -45,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased bg-white m-0 p-0">
+      <body className="font-sans antialiased bg-white m-0 p-0 overflow-hidden">
         <PhoneFrame>
           <AuthProvider>
             {children}
