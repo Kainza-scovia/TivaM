@@ -44,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased bg-white m-0 p-0 overflow-hidden">
+      <body className="font-sans antialiased bg-white m-0 p-0">
         <PhoneFrame>
           <AuthProvider>
             {children}
