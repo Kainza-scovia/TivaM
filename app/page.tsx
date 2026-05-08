@@ -121,20 +121,19 @@ function AppContent() {
   }
 
   return (
-    <div className="flex justify-center bg-background p-4">
-        <div className="w-full max-w-sm bg-background shadow-lg rounded-2xl overflow-hidden flex flex-col h-fit">
+    <div className="flex flex-col justify-center bg-background p-4 min-h-screen">
+        <div className="w-full max-w-sm bg-background shadow-lg rounded-2xl overflow-hidden flex flex-col h-fit mx-auto">
           {/* Mobile frame border - scrollable for vendor and detail screens */}
           <div className="relative bg-background flex-1 overflow-y-auto pb-20">
             {screenComponent}
           </div>
         </div>
-    </div>
 
       {/* Bottom navigation - shown on non-onboarding screens */}
       {currentScreen !== 'onboarding' &&
         !currentScreen.startsWith('detail-') &&
         currentScreen !== 'vendor' && (
-          <div className="fixed bottom-0 left-0 right-0 w-full bg-card border-t border-border md:static">
+          <div className="fixed bottom-0 left-0 right-0 w-full bg-card border-t border-border md:static md:w-full md:max-w-sm md:mx-auto md:mt-0">
             <div className="flex items-center justify-around px-4 py-3">
               <button
                 onClick={() => handleNavigate('home')}
