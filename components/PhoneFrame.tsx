@@ -6,9 +6,9 @@ interface PhoneFrameProps {
 
 export function PhoneFrame({ children }: PhoneFrameProps) {
   return (
-    <div className="w-full overflow-auto flex items-center justify-center bg-blue-50 p-8" style={{ minHeight: '100vh' }}>
+    <div className="w-full flex items-center justify-center bg-blue-50 p-8">
       {/* Phone Container */}
-      <div className="relative w-full max-w-sm flex-shrink-0 my-8">
+      <div className="relative w-full max-w-sm flex-shrink-0">
         {/* Phone Body */}
         <div className="bg-black rounded-[40px] shadow-2xl overflow-hidden border-[8px] border-black">
           {/* Screen Area */}
