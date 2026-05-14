@@ -17,13 +17,18 @@ function ResetPasswordContent() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [sessionError, setSessionError] = useState(false);
-  const supabase = createClient();
 
   // Check if user has valid session from reset link
   useEffect(() => {
     const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase.auth.getSession();
+        if (!data.session) {
+          setSessionError(true);
+        }
+      } catch (error) {
+        console.error('[v0] Error checking session:', error);
         setSessionError(true);
       }
     };
@@ -53,6 +58,7 @@ function ResetPasswordContent() {
     setLoading(true);
 
     try {
+      const supabase = createClient();
       const { error: updateError } = await supabase.auth.updateUser({
         password: password,
       });
