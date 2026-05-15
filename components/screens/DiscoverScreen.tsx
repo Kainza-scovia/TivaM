@@ -92,8 +92,8 @@ export function DiscoverScreen({ onNavigate }: DiscoverScreenProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary/10 to-accent/5 px-4 py-4 border-b border-border sticky top-0 z-10">
-        <div className="max-w-sm mx-auto">
+      <div className="bg-gradient-to-br from-primary/10 to-accent/5 px-4 md:px-6 lg:px-8 py-4 border-b border-border sticky top-0 z-10">
+        <div className="max-w-sm md:max-w-4xl lg:max-w-6xl mx-auto">
           <div className="flex items-center gap-2 mb-4">
             <Button
               variant="ghost"
@@ -103,7 +103,7 @@ export function DiscoverScreen({ onNavigate }: DiscoverScreenProps) {
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <h1 className="text-xl font-bold text-foreground flex-1">{t('discover')}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-foreground flex-1">{t('discover')}</h1>
           </div>
 
           {/* Search bar */}
@@ -119,16 +119,16 @@ export function DiscoverScreen({ onNavigate }: DiscoverScreenProps) {
         </div>
       </div>
 
-      <div className="max-w-sm mx-auto px-4 py-4">
+      <div className="max-w-sm md:max-w-4xl lg:max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-4">
         {/* Filter chips */}
-        <div className="flex gap-2 overflow-x-auto pb-4">
+        <div className="flex gap-2 overflow-x-auto pb-4 md:grid md:grid-cols-5 md:overflow-x-visible md:gap-3">
           {filters.map((filter) => (
             <Button
               key={filter}
               variant={activeFilter === filter ? 'default' : 'outline'}
               size="sm"
               onClick={() => setActiveFilter(filter)}
-              className="whitespace-nowrap capitalize"
+              className="whitespace-nowrap md:whitespace-normal capitalize"
             >
               {filter === 'all' ? t('all') : filter}
             </Button>
@@ -136,7 +136,7 @@ export function DiscoverScreen({ onNavigate }: DiscoverScreenProps) {
         </div>
 
         {/* Places grid */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {filteredPlaces.map((place) => (
             <Card
               key={place.id}
@@ -144,7 +144,7 @@ export function DiscoverScreen({ onNavigate }: DiscoverScreenProps) {
               onClick={() => onNavigate(`detail-${place.id}`)}
             >
               {/* Image placeholder */}
-              <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
+              <div className="w-full h-32 md:h-40 lg:h-48 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
                 {place.id === 1 && (
                   <img src="/images/feima.jpg" alt={place.name} className="w-full h-full object-cover" />
                 )}

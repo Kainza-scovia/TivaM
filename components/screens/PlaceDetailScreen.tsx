@@ -315,7 +315,7 @@ export function PlaceDetailScreen({ placeId, onNavigate, isSaved: initialIsSaved
   return (
     <div className="min-h-screen bg-background">
       {/* Hero image carousel */}
-      <div className="relative w-full h-64 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden group">
+      <div className="relative w-full h-64 md:h-80 lg:h-96 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden group">
         {placeId === 1 && (
           <img src="/images/feima.jpg" alt={place.name} className="w-full h-full object-cover" />
         )}
@@ -366,28 +366,28 @@ export function PlaceDetailScreen({ placeId, onNavigate, isSaved: initialIsSaved
 
       </div>
 
-      <div className="max-w-sm mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-sm md:max-w-4xl lg:max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6 space-y-6">
         {/* Place header */}
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">{place.name}</h1>
-              <p className="text-sm text-muted-foreground">{place.subtitle}</p>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">{place.name}</h1>
+              <p className="text-sm md:text-base text-muted-foreground">{place.subtitle}</p>
             </div>
             {place.verified && (
-              <div className="flex items-center gap-1 bg-accent/10 px-2 py-1 rounded-full flex-shrink-0">
-                <VerifiedIcon className="w-4 h-4 text-accent" />
-                <span className="text-xs font-semibold text-accent">
+              <div className="flex items-center gap-1 bg-accent/10 px-2 py-1 rounded-full flex-shrink-0 text-xs md:text-sm">
+                <VerifiedIcon className="w-4 h-4 text-accent flex-shrink-0" />
+                <span className="font-semibold text-accent">
                   {t('ministry-verified')}
                 </span>
               </div>
             )}
           </div>
-          <p className="text-xs text-muted-foreground">{place.category}</p>
+          <p className="text-xs md:text-sm text-muted-foreground">{place.category}</p>
         </div>
 
         {/* Quick info */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
           <Card className="p-3 text-center">
             <Clock className="w-4 h-4 mx-auto mb-1 text-primary" />
             <p className="text-xs font-semibold text-foreground">{place.hours}</p>
