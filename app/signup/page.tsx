@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { firebaseAuth } from '@/lib/firebase/authService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, Loader, CheckCircle, X } from 'lucide-react';
@@ -21,7 +21,6 @@ function SignupContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const supabase = createClient();
 
   const validatePassword = () => {
     if (password.length < 6) {
@@ -46,51 +45,18 @@ function SignupContent() {
     setLoading(true);
 
     try {
-      const { error: signUpError, data } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/login?redirect=${encodeURIComponent(redirectTo)}`,
-        },
-      });
+      await firebaseAuth.signup(email, password);
 
-      if (signUpError) {
-        setError(signUpError.message || 'Failed to create account');
-        setLoading(false);
-        return;
-      }
-      
-      // Auto-login after successful signup if user is created
-      if (data?.user) {
-        // Sign in with the same credentials
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        
-        if (signInError) {
-          // Auto-login didn't work, redirect to home after a moment
-          setSuccess(true);
-          setLoading(false);
-          setTimeout(() => {
-            router.push('/');
-          }, 2000);
-        } else {
-          // Auto-login successful, redirect to home immediately
-          router.push('/');
-        }
-      } else {
-        // Email confirmation required, redirect to home
-        setSuccess(true);
-        setLoading(false);
-        setTimeout(() => {
-          router.push('/');
-        }, 2000);
-      }
+      // Account created successfully, redirect to home
+      setSuccess(true);
+      setLoading(false);
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     } catch (err: any) {
       // Check if it's a network error
       if (err?.message === 'Failed to fetch') {
-        setError('Network error - Unable to reach Supabase. Please check your internet connection.');
+        setError('Network error - Unable to reach Firebase. Please check your internet connection.');
       } else {
         setError(err?.message || 'An unexpected error occurred');
       }

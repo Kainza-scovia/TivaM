@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { firebaseAuth } from '@/lib/firebase/authService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Mail, CheckCircle, X } from 'lucide-react';
@@ -14,7 +14,6 @@ function ForgotPasswordContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const supabase = createClient();
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,20 +27,12 @@ function ForgotPasswordContent() {
     }
 
     try {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-
-      if (resetError) {
-        setError(resetError.message || 'Failed to send reset email');
-        setLoading(false);
-        return;
-      }
+      await firebaseAuth.sendPasswordReset(email);
 
       setSuccess(true);
       setLoading(false);
     } catch (err: any) {
-      setError(err?.message || 'An unexpected error occurred');
+      setError(err?.message || 'Failed to send password reset email');
       setLoading(false);
     }
   };

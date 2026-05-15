@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { firebaseAuth } from '@/lib/firebase/authService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, Loader, X } from 'lucide-react';
@@ -20,7 +20,6 @@ function LoginContent() {
   const [error, setError] = useState('');
   const [isLocked, setIsLocked] = useState(false);
   const [lockoutTimeRemaining, setLockoutTimeRemaining] = useState(0);
-  const supabase = createClient();
 
   // Check for account lockout on mount
   const checkLockout = () => {
@@ -103,17 +102,7 @@ function LoginContent() {
     }
 
     try {
-      const { error: signInError, data } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (signInError) {
-        // Record failed attempt and show appropriate error
-        recordFailedAttempt();
-        setLoading(false);
-        return;
-      }
+      await firebaseAuth.signin(email, password);
 
       // Login successful - clear attempts and redirect
       clearAttempts();
@@ -123,7 +112,7 @@ function LoginContent() {
       
       // Check if it's a network error
       if (err?.message === 'Failed to fetch') {
-        setError('Network error - Unable to reach Supabase. Please check your internet connection.');
+        setError('Network error - Unable to reach Firebase. Please check your internet connection.');
       } else {
         recordFailedAttempt();
       }
