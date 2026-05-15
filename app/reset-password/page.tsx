@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, Suspense, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { firebaseAuth } from '@/lib/firebase/authService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, CheckCircle, X } from 'lucide-react';
 
 function ResetPasswordContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,20 +21,12 @@ function ResetPasswordContent() {
 
   // Check if user has valid session from reset link
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const supabase = createClient();
-        const { data } = await supabase.auth.getSession();
-        if (!data.session) {
-          setSessionError(true);
-        }
-      } catch (error) {
-        console.error('[v0] Error checking session:', error);
-        setSessionError(true);
-      }
-    };
-    checkSession();
-  }, []);
+    // Firebase passes the code via URL parameter when user clicks reset link
+    const resetCode = searchParams.get('oobCode');
+    if (!resetCode) {
+      setSessionError(true);
+    }
+  }, [searchParams]);
 
   const validatePassword = () => {
     if (password.length < 6) {
@@ -58,16 +51,14 @@ function ResetPasswordContent() {
     setLoading(true);
 
     try {
-      const supabase = createClient();
-      const { error: updateError } = await supabase.auth.updateUser({
-        password: password,
-      });
-
-      if (updateError) {
-        setError(updateError.message || 'Failed to reset password');
+      const resetCode = searchParams.get('oobCode');
+      if (!resetCode) {
+        setError('Invalid password reset link');
         setLoading(false);
         return;
       }
+
+      await firebaseAuth.resetPassword(resetCode, password);
 
       setSuccess(true);
       setLoading(false);
@@ -77,7 +68,7 @@ function ResetPasswordContent() {
         router.push('/login');
       }, 3000);
     } catch (err: any) {
-      setError(err?.message || 'An unexpected error occurred');
+      setError(err?.message || 'Failed to reset password');
       setLoading(false);
     }
   };

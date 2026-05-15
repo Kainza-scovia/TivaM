@@ -1,8 +1,8 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import type { User } from '@supabase/supabase-js'
+import { firebaseAuth } from '@/lib/firebase/authService'
+import type { User } from 'firebase/auth'
 
 interface AuthContextType {
   user: User | null
@@ -20,49 +20,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const supabase = createClient()
-
-    // Get initial session
-    const getSession = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
-        setUser(session?.user ?? null)
-      } catch (error) {
-        console.error('[v0] Error getting session:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    getSession()
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
+    // Listen for auth state changes
+    const unsubscribe = firebaseAuth.onAuthStateChange((firebaseUser) => {
+      setUser(firebaseUser)
+      setIsLoading(false)
     })
 
     return () => {
-      subscription.unsubscribe()
+      unsubscribe()
     }
   }, [])
 
   const signUp = async (email: string, password: string) => {
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo:
-            process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
-            `${window.location.origin}`,
-        },
-      })
-      return { error }
+      await firebaseAuth.signup(email, password)
+      return { error: null }
     } catch (error) {
       return { error: error as Error }
     }
@@ -70,12 +42,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-      return { error }
+      await firebaseAuth.signin(email, password)
+      return { error: null }
     } catch (error) {
       return { error: error as Error }
     }
@@ -83,8 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      const supabase = createClient()
-      await supabase.auth.signOut()
+      await firebaseAuth.logout()
       setUser(null)
     } catch (error) {
       console.error('[v0] Error signing out:', error)
@@ -110,3 +77,4 @@ export function useAuth() {
   }
   return context
 }
+

@@ -1,84 +1,71 @@
-import { createClient } from '@/lib/supabase/client';
+import { firestoreService } from '@/lib/firebase/firestoreService'
+import { firebaseAuth } from '@/lib/firebase/authService'
 
 export interface SavedPlace {
-  id: string;
-  user_id: string;
-  place_name: string;
-  place_id: string;
-  category: string;
-  created_at: string;
+  id: string
+  userId: string
+  vendorId: string
+  vendorName: string
+  category: string
+  image?: string
+  savedAt: string
 }
 
 /**
  * Add a place to user's favorites in the database
  */
 export async function savePlace(
-  placeName: string,
-  placeId: string,
-  category: string
+  vendorName: string,
+  vendorId: string,
+  category: string,
+  image?: string
 ): Promise<SavedPlace | null> {
   try {
-    const supabase = createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = firebaseAuth.getCurrentUser()
     if (!user) {
-      console.error('[v0] User not authenticated');
-      return null;
+      console.error('[v0] User not authenticated')
+      return null
     }
 
-    const { data, error } = await supabase.from('favorites').insert([
-      {
-        user_id: user.id,
-        place_name: placeName,
-        place_id: placeId,
-        category,
-      },
-    ]);
+    const savedPlaceId = await firestoreService.addSavedPlace({
+      userId: user.uid,
+      vendorId,
+      vendorName,
+      category,
+      image
+    })
 
-    if (error) {
-      console.error('[v0] Error saving place:', error);
-      return null;
+    return {
+      id: savedPlaceId,
+      userId: user.uid,
+      vendorId,
+      vendorName,
+      category,
+      image,
+      savedAt: new Date().toISOString()
     }
-
-    return data?.[0] || null;
   } catch (err) {
-    console.error('[v0] Error saving place:', err);
-    return null;
+    console.error('[v0] Error saving place:', err)
+    return null
   }
 }
 
 /**
  * Remove a place from user's favorites
  */
-export async function removeSavedPlace(placeId: string): Promise<boolean> {
+export async function removeSavedPlace(vendorId: string): Promise<boolean> {
   try {
-    const supabase = createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = firebaseAuth.getCurrentUser()
     if (!user) {
-      console.error('[v0] User not authenticated');
-      return false;
+      console.error('[v0] User not authenticated')
+      return false
     }
 
-    const { error } = await supabase
-      .from('favorites')
-      .delete()
-      .eq('user_id', user.id)
-      .eq('place_id', placeId);
-
-    if (error) {
-      console.error('[v0] Error removing saved place:', error);
-      return false;
-    }
-
-    return true;
+    await firestoreService.removeSavedPlaceByVendor(user.uid, vendorId)
+    return true
   } catch (err) {
-    console.error('[v0] Error removing saved place:', err);
-    return false;
+    console.error('[v0] Error removing saved place:', err)
+    return false
   }
 }
 
@@ -87,58 +74,33 @@ export async function removeSavedPlace(placeId: string): Promise<boolean> {
  */
 export async function getUserSavedPlaces(): Promise<SavedPlace[]> {
   try {
-    const supabase = createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = firebaseAuth.getCurrentUser()
     if (!user) {
-      console.error('[v0] User not authenticated');
-      return [];
+      console.error('[v0] User not authenticated')
+      return []
     }
 
-    const { data, error } = await supabase
-      .from('favorites')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('[v0] Error fetching saved places:', error);
-      return [];
-    }
-
-    return data || [];
+    return await firestoreService.getSavedPlaces(user.uid)
   } catch (err) {
-    console.error('[v0] Error fetching saved places:', err);
-    return [];
+    console.error('[v0] Error fetching saved places:', err)
+    return []
   }
 }
 
 /**
  * Check if a place is saved by the current user
  */
-export async function isPlaceSaved(placeId: string): Promise<boolean> {
+export async function isPlaceSaved(vendorId: string): Promise<boolean> {
   try {
-    const supabase = createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = firebaseAuth.getCurrentUser()
     if (!user) {
-      return false;
+      return false
     }
 
-    const { data, error } = await supabase
-      .from('favorites')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('place_id', placeId)
-      .single();
-
-    return !error && !!data;
+    const savedPlaces = await firestoreService.getSavedPlaces(user.uid)
+    return savedPlaces.some((place) => place.vendorId === vendorId)
   } catch (err) {
-    console.error('[v0] Error checking if place is saved:', err);
-    return false;
+    console.error('[v0] Error checking if place is saved:', err)
+    return false
   }
 }
