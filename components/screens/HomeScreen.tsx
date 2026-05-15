@@ -100,18 +100,18 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-gradient-to-br from-primary/10 to-accent/5 px-4 py-4 border-b border-border">
-        <div className="max-w-sm mx-auto">
+        <div className="max-w-sm md:max-w-4xl lg:max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-4">
-            <div className="font-bold text-xl text-primary">TivaM</div>
+            <div className="font-bold text-xl md:text-2xl text-primary">TivaM</div>
             <AuthNav />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">{t('discover-title')}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('discover-title')}</h1>
         </div>
       </div>
 
-      <div className="max-w-sm mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-sm md:max-w-4xl lg:max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6 space-y-6">
         {/* Image Carousel */}
-        <div className="relative w-full rounded-2xl overflow-hidden shadow-lg h-48">
+        <div className="relative w-full rounded-2xl overflow-hidden shadow-lg h-48 md:h-64 lg:h-80">
           {/* Carousel slides */}
           <div className="relative w-full h-full overflow-hidden">
             {carouselSlides.map((slide, idx) => (
@@ -131,10 +131,10 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
                 
                 {/* Text content */}
                 <div className="absolute inset-0 flex flex-col items-center justify-end p-4 text-center">
-                  <h3 className="text-white font-bold text-lg text-balance mb-1">
+                  <h3 className="text-white font-bold text-sm md:text-lg text-balance mb-1">
                     {slide.title}
                   </h3>
-                  <p className="text-white/90 text-xs">
+                  <p className="text-white/90 text-xs md:text-sm">
                     {slide.subtitle}
                   </p>
                 </div>
@@ -161,15 +161,15 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
 
         {/* Category filters */}
         <div>
-          <h3 className="text-sm font-semibold text-foreground mb-3">{t('food')}, {t('crafts')}, {t('markets')}, {t('culture')}</h3>
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <h3 className="text-sm md:text-base font-semibold text-foreground mb-3">{t('food')}, {t('crafts')}, {t('markets')}, {t('culture')}</h3>
+          <div className="flex gap-2 overflow-x-auto pb-2 md:grid md:grid-cols-4 md:overflow-x-visible md:gap-3">
             {categories.map((cat) => (
               <Button
                 key={cat.id}
                 variant={activeCategory === cat.id ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setActiveCategory(cat.id)}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap md:whitespace-normal"
               >
                 <span className="mr-1">{cat.icon}</span>
                 {cat.label}
@@ -180,20 +180,20 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
 
         {/* Featured Hidden Gems */}
         <div>
-          <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+          <h2 className="text-lg md:text-xl font-bold text-foreground mb-4 flex items-center gap-2">
             {t('hidden-gems')}
             <span className="text-xl">💎</span>
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 scroll-smooth">
+          <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 scroll-smooth md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-x-visible md:gap-4 md:mx-0 md:px-0">
             {featuredGems.map((gem) => (
               <div
                 key={gem.id}
                 onClick={() => onNavigate(`detail-${gem.id}`)}
-                className="flex-shrink-0 w-56 cursor-pointer group"
+                className="flex-shrink-0 w-56 md:w-full cursor-pointer group"
               >
                 <Card className="h-full overflow-hidden border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col bg-card">
                   {/* Image Container with Overlay */}
-                  <div className="relative h-40 w-full overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20">
+                  <div className="relative h-40 md:h-48 w-full overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20">
                     {gem.id === 1 && (
                       <img src="/images/feima.jpg" alt={gem.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                     )}
@@ -250,7 +250,7 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
         </div>
 
         {/* Vendor Digital Ambassador CTA */}
-        <div className="mt-8 mb-6">
+        <div className="mt-8 md:mt-12 mb-6 md:mb-8">
           <Card 
             onClick={() => onNavigate('vendor')}
             className="relative overflow-hidden cursor-pointer bg-gradient-to-br from-accent/5 via-secondary/30 to-accent/10 border-2 border-accent/30 hover:border-accent/60 transition-all duration-300 hover:shadow-lg hover:shadow-accent/20 p-6"
@@ -263,36 +263,36 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
             <div className="relative z-10">
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-foreground mb-1">
+                  <h3 className="text-lg md:text-xl font-bold text-foreground mb-1">
                     {t('vendor-cta-title')}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm md:text-base text-muted-foreground">
                     {t('vendor-cta-subtitle')}
                   </p>
                 </div>
-                <div className="text-2xl flex-shrink-0">🌟</div>
+                <div className="text-2xl md:text-3xl flex-shrink-0">🌟</div>
               </div>
 
-              <p className="text-sm text-foreground mb-4 leading-relaxed">
+              <p className="text-sm md:text-base text-foreground mb-4 leading-relaxed">
                 {t('vendor-cta-description')}
               </p>
 
               {/* Benefits preview */}
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                <div className="flex items-center gap-2 text-xs text-foreground">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4">
+                <div className="flex items-center gap-2 text-xs md:text-sm text-foreground">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
                   {t('vendor-verified-badge')}
                 </div>
-                <div className="flex items-center gap-2 text-xs text-foreground">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <div className="flex items-center gap-2 text-xs md:text-sm text-foreground">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
                   {t('vendor-customer-access')}
                 </div>
-                <div className="flex items-center gap-2 text-xs text-foreground">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <div className="flex items-center gap-2 text-xs md:text-sm text-foreground">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
                   {t('vendor-whatsapp')}
                 </div>
-                <div className="flex items-center gap-2 text-xs text-foreground">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <div className="flex items-center gap-2 text-xs md:text-sm text-foreground">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
                   {t('vendor-support')}
                 </div>
               </div>
